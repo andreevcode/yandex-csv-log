@@ -51,20 +51,21 @@ public class CsvParser {
     //Find most active users
     public Map<String,Long> findActiveUsers(List<LogValue> logValueList){
         Map<String, Long> users =  logValueList.stream()
-                .collect(Collectors.groupingBy(LogValue::getSrc_user, Collectors.counting()));
-
-        users = users.entrySet().stream()
+                .collect(Collectors.groupingBy(LogValue::getSrc_user, Collectors.counting()))
+                .entrySet()
+                .stream()
                 .sorted( (m1,m2)->Long.compare(m2.getValue(), m1.getValue()))
                 .limit(6)
                 .collect(Collectors.toMap(m->m.getKey(), m->m.getValue()));
         return users;
     }
 
+    // Find users with most output
     public Map<String,Long> findMostOutputUsers(List<LogValue> logValueList){
         Map<String, Long> users =  logValueList.stream()
-                .collect(Collectors.groupingBy(LogValue::getSrc_user, Collectors.summingLong(LogValue::getOutput_byte)));
-
-        users = users.entrySet().stream()
+                .collect(Collectors.groupingBy(LogValue::getSrc_user, Collectors.summingLong(LogValue::getOutput_byte)))
+                .entrySet()
+                .stream()
                 .sorted( (m1,m2)->Long.compare(m2.getValue(), m1.getValue()))
                 .limit(6)
                 .collect(Collectors.toMap(m->m.getKey(), m->m.getValue()));
