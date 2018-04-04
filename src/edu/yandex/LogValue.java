@@ -1,9 +1,10 @@
 package edu.yandex;
 
-import java.lang.reflect.Field;
+import java.util.Date;
 
+// Template for LogValue
 public class LogValue {
-    String _time;
+    Date time;
     String src_user;
     String src_ip;
     String src_port;
@@ -12,6 +13,7 @@ public class LogValue {
     String dest_port;
     long input_byte;
     long output_byte;
+    long interval;
 
     public String getSrc_user() {
         return src_user;
@@ -21,5 +23,11 @@ public class LogValue {
         return output_byte;
     }
 
+    public long getInterval() {
+        return interval;
+    }
 
+    public Date getTime() {
+        return time;
+    }
 }

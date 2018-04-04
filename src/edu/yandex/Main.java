@@ -1,49 +1,40 @@
 package edu.yandex;
 
-import com.sun.jdi.LongValue;
-import javafx.scene.input.KeyCode;
-
-//import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
-import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
-//import static sun.tools.java.Constants.COMMA;
+import java.util.function.*;
 
 public class Main {
 
-
-
+    // Parsing CSV and making some tests
     public static void main(String[] args) {
-	    System.out.println(getCurrentDate());
+	    System.out.println(getCurrentDate()+" Parsing CSV started");
 
-        CsvParser csvParser = new CsvParser();
+	    // Parsing CSV
+        List<LogValue> logValueList= CsvParser.parseCsv("C:\\TestPath\\shkib.csv");
+        System.out.println(getCurrentDate()+" CSV was parsed");
 
-        List<LogValue> logValueList= csvParser.processInputFile("C:\\TestPath\\shkib.csv");
-        System.out.println("\n" + getCurrentDate());
-        //HashMap with mostActive users
-        Map<String,Long> activeUsers = csvParser.findActiveUsers(logValueList);
-        Map<String,Long> mostOutputUsers = csvParser.findMostOutputUsers(logValueList);
-
+        //Getting Map of most active users (by the count of connections)
+        Map<String,Long> activeUsers = CsvParser.findActiveUsers(logValueList);
+        System.out.println("\n" + getCurrentDate()+" Most active users founded");
         activeUsers.forEach((k,v)->System.out.println(k + " " + v));
-        System.out.println("\n" + getCurrentDate());
+
+        //Getting Map with users which have most output traffic
+        Map<String,Long> mostOutputUsers = CsvParser.findMostOutputUsers(logValueList);
+        System.out.println("\n" + getCurrentDate()+" Src_users with most traffic founded");
         mostOutputUsers.forEach((k,v)->System.out.println(k + " " + v));
-        System.out.println("\n" + getCurrentDate());
+
+        //Getting Map with src_users and their Date intervals between distinct connections
+        //Printing statistics at the same time
+        Map<String,List<Long>> intervals2Map = CsvParser.getDistinctIntervalsMap.apply(logValueList);
+        System.out.println(getCurrentDate()+" A map of Distinct intervals by users was created");
     }
 
-    private static void printField(String st){
-        System.out.print(st+" ");
-    }
-
+    //Get current Date time stamp
     private static String getCurrentDate(){
         SimpleDateFormat sdDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
         Date now = new Date();
         String strDate = sdDate.format(now);
         return  strDate;
     }
-
-
-
 }
